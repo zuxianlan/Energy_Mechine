@@ -1,0 +1,12 @@
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+energy_mechanism_core\port.o: E:\keil5_stm32\ARM\ARMCC\Bin\..\include\stddef.h
+energy_mechanism_core\port.o: E:\keil5_stm32\ARM\ARMCC\Bin\..\include\stdint.h
+energy_mechanism_core\port.o: ../Core/Inc/FreeRTOSConfig.h
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+energy_mechanism_core\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
