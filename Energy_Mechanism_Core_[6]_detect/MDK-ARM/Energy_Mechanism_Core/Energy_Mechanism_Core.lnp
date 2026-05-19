@@ -40,6 +40,7 @@
 "energy_mechanism_core\ws2812.o"
 "energy_mechanism_core\m15_task.o"
 "energy_mechanism_core\run_task.o"
+"energy_mechanism_core\motor_task.o"
 "energy_mechanism_core\pid.o"
 "energy_mechanism_core\can_receive.o"
 "energy_mechanism_core\remote_control.o"

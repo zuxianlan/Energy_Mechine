@@ -54,7 +54,9 @@ osStaticThreadDef_t CoreControlBlock;
 osThreadId RUNHandle;
 uint32_t RUNBuffer[ 128 ];
 osStaticThreadDef_t RUNControlBlock;
-
+osThreadId MotorHandle;
+uint32_t MotorBuffer[ 256 ];
+osStaticThreadDef_t MotorControlBlock;
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
@@ -63,6 +65,7 @@ osStaticThreadDef_t RUNControlBlock;
 void StartDefaultTask(void const * argument);
 void M15_task(void const * argument);
 void run_task(void const * argument);
+void Motor_task(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -120,6 +123,10 @@ void MX_FREERTOS_Init(void) {
   /* definition and creation of RUN */
   osThreadStaticDef(RUN, run_task, osPriorityNormal, 0, 128, RUNBuffer, &RUNControlBlock);
   RUNHandle = osThreadCreate(osThread(RUN), NULL);
+
+  /* definition and creation of Motor */
+  osThreadStaticDef(Motor, Motor_task, osPriorityNormal, 0, 256, MotorBuffer, &MotorControlBlock);
+  MotorHandle = osThreadCreate(osThread(Motor), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */

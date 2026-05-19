@@ -94,7 +94,7 @@ typedef struct
   motor_measure_t M15;
 } move_t;
 
-extern move_t move;
+extern move_t chassis_move;
 
 /**
   * @brief          µ×ÅÌÈÎÎñ£¬¼ä¸ô 2ms

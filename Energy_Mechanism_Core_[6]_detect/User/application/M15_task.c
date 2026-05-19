@@ -10,12 +10,8 @@
 #include <time.h>
 #include "PID.h"
 
-fp32 fp32_constrain(fp32 Value, fp32 minValue, fp32 maxValue);
-void move_init(move_t *chassis_move_init);
 static void set_mode(move_t *chassis_move_mode);
-static void feedback_update(move_t *chassis_move_update);
 static void set_contorl(move_t *chassis_move_control);
-static void control_loop(move_t *chassis_move_control_loop);
 void Random_Number(void);
 void Get_Random_Permutation_1to5(int result[5]);
 void Start_New_Activation_Sequence(void);
@@ -89,42 +85,18 @@ uint32_t round_switch_time = 0;       // 轮次切换发生的时间戳
 
 void M15_task(void const * argument)
 {
-	move_init(&chassis_move);
 	srand(HAL_GetTick());
 	while(1)
 	{
 		//设置控制模式
     	set_mode(&chassis_move);
-		//数据更新
-		feedback_update(&chassis_move);   
+
 		//控制量设置
-		set_contorl(&chassis_move);		
-	    //pid计算
-		control_loop(&chassis_move);
-		
-//		CAN_cmd_chassis(chassis_move.rotation_motor_measure.give_current);
-		
-		CAN_cmd_chassis(chassis_move.wz_set);
+		set_contorl(&chassis_move);	
 		
 		vTaskDelay(1);
 	}
 
-}
-
-const static fp32 rotation_speed_pid[3] = {ROTATION_MOTOR_SPEED_PID_KP, ROTATION_MOTOR_SPEED_PID_KI, ROTATION_MOTOR_SPEED_PID_KD};
-
-/**
-  * @brief          初始化
-  * @param[in]      none
-  * @retval         none
-  */
-void move_init(move_t *move_init)
-{
-		move_init->rotation_motor_measure.motor_measure = get_chassis_motor_1_measure_point();
-		PID_init(&move_init->rotation_motor_pid, PID_POSITION, rotation_speed_pid, ROTATION_MOTOR_SPEED_PID_MAX_OUT, ROTATION_MOTOR_SPEED_PID_MAX_IOUT);
-
-		move_init->wz_max_speed = NORMAL_MAX_ROTATION_SPEED_Z;
-		move_init->wz_min_speed = -NORMAL_MAX_ROTATION_SPEED_Z;
 }
 
 /**
@@ -140,16 +112,6 @@ static void set_mode(move_t *move_mode)
 void behaviour_mode_set(move_t *move_mode)
 {
     if (move_mode == NULL)	{return;}
-}
-
-void feedback_update(move_t *move_update)
-{
-
-	//云台
-	move_update->rotation_motor_measure.speed = move_update->rotation_motor_measure.motor_measure->rpm;
-
-  //更新速度
-	move_update->wz = move_update->rotation_motor_measure.speed / 100 / 60 * 2;
 }
 
 /**
@@ -617,8 +579,8 @@ static void set_contorl(move_t *move_control)
 		
 		//速度设定		
 		move_control->rotation_motor_measure.speed_set = move_control->wz_set;
-		CAN_cmd_chassis_set_feedback(0x01);	
-		CAN_cmd_chassis_set_mode(MODE_2,MODE_2);
+		// CAN_cmd_chassis_set_feedback(0x01);	
+		// CAN_cmd_chassis_set_mode(MODE_2,MODE_2);
 }
 
 //生成随机速度参数
@@ -697,24 +659,5 @@ void Big_Round_Control(uint8_t action)
 	else
 	{
 		mode = fail;
-	}
-}
-
-static void control_loop(move_t *move_control_loop)
-{
-	PID_calc(&move_control_loop->rotation_motor_pid, move_control_loop->rotation_motor_measure.speed, move_control_loop->rotation_motor_measure.speed_set);
-	move_control_loop->rotation_motor_measure.give_current = (int16_t)(move_control_loop->rotation_motor_pid.out);
-}
-
-fp32 fp32_constrain(fp32 Value, fp32 minValue, fp32 maxValue)
-{
-	if(Value < minValue){
-		return minValue;
-	}
-    else if(Value > maxValue){
-        return maxValue;
-	}
-    else{
-        return Value;
 	}
 }
